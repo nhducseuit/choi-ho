@@ -1,0 +1,15 @@
+<div class="admin-group" *ngIf="tontine">
+  <button mat-icon-button color="primary" aria-label="Adjust order of tontine for next round">
+    <mat-icon>shuffle</mat-icon>
+  </button>
+
+  <button mat-icon-button color="primary" aria-label="Add an investor to current tontine" (click)="addNewInvestor()">
+    <mat-icon>playlist_add</mat-icon>
+  </button>
+
+  <button mat-icon-button aria-label="Remove an investor from current tontine current tontine">
+    <mat-icon>delete_forever</mat-icon>
+  </button>
+
+</div>
+<router-outlet></router-outlet>

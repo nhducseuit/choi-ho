@@ -1,0 +1,13 @@
+form {
+  display: flex;
+  flex-direction: column;
+  widows: 60%;
+}
+.turn-control {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  .mat-slider {
+    flex-grow: 1;
+  }
+}

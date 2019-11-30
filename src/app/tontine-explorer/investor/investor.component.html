@@ -1,0 +1,56 @@
+<div class="investor-detail" *ngIf="investor && tontine">
+  <div class="flex column">
+    <h4>Thông tin chung</h4>
+    <div class="personal-info flex column">
+      <a [href]="investor.fb" target="blank"><i class="material-icons">link</i>{{ investor.name }}</a>
+      <span><i class="material-icons">smartphone</i>{{ investor.phoneNumber }}</span>
+      <span><i class="material-icons">group_add</i>Tham gia hụi từ {{ joinDate }}</span>
+    </div>
+    <h4>Các thống kê trong hụi</h4>
+    <div class="flex column tontine-statistics">
+      <div>
+        <i class="material-icons">check_circle_outline</i>
+        Đầu tư  hàng tháng {{ tontine.sum * investor.turns }} ngàn đồng
+      </div>
+      <div *ngIf="passedTurns.length > 0; else noPassedTurn">
+        <i class="material-icons">check_circle_outline</i>
+        Các kỳ hụi đã nhận đầu tư:
+        <span *ngFor="let passedTurn of passedTurns">
+          {{ passedTurn }}
+        </span>
+      </div>
+      <ng-template #noPassedTurn>
+        <div>
+          <i class="material-icons">check_circle_outline</i>
+          Chưa nhận đầu tư trong vòng này
+        </div>
+      </ng-template>
+      <div *ngIf="remainingTurns.length > 0; else noRemainingTurn">
+        <i class="material-icons">check_circle_outline</i>
+        Các kỳ hụi chờ nhận đầu tư:
+        <span *ngFor="let remainingTurn of remainingTurns">
+          {{ remainingTurn }}
+        </span>
+      </div>
+      <ng-template #noRemainingTurn>
+        <div>
+          <i class="material-icons">check_circle_outline</i>
+          Không còn kỳ hụi chờ nhận đầu tư
+        </div>
+      </ng-template>
+      <div>
+        <i class="material-icons">check_circle_outline</i>
+        Cân bằng dư nợ hiện tại là {{ investor.debt }} ngàn đồng
+      </div>
+      <div>
+        <i class="material-icons">check_circle_outline</i>
+        Cân bằng dư nợ ở cuối vòng vào {{ endOfRound }} là {{ endOfRoundDebt }} ngàn đồng
+      </div>
+    </div>
+    <h4>Tài khoản ngân hàng</h4>
+    <div class="flex column bank-account">
+      <span>{{ investor.bankAccount }}</span>
+      <span>{{ investor.bank }}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+.investor-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  .investor {
+    margin-right: 32px;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+}

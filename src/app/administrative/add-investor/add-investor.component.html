@@ -1,0 +1,40 @@
+<h3>Add an investor</h3>
+<form [formGroup]="investor" *ngIf="tontine">
+  <mat-form-field>
+    <input matInput formControlName="name" placeholder="Họ tên đầy đủ người tham gia">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="joinDate" [matDatepicker]="picker" placeholder="Lựa ngày tham gia hụi">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker startView="year" [startAt]="investor.get('joinDate').value"></mat-datepicker>
+  </mat-form-field>
+  <div formArrayName="turns" *ngFor="let turn of turns.controls; let i = index;">
+    <div class="turn-control">
+      <mat-slider [formControlName]="i"
+        min="1"
+        [max]="tontine.round"
+        [value]="turn.value"
+        step="1"
+        thumbLabel
+        [displayWith]="formatLabel"
+        ></mat-slider>
+      <button mat-icon-button color="warning" (click)="removeTurn(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+  <button mat-icon-button color="primary" (click)="addNewTurn()">
+    <mat-icon>add</mat-icon>
+  </button>
+  <mat-form-field>
+    <input matInput formControlName="bank" placeholder="Chi nhánh ngân hàng">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput formControlName="bankAccount" placeholder="Số tài khoản ngân hàng">
+  </mat-form-field>
+
+  <div class="action-buttons">
+    <button mat-raised-button color="primary" (click)="addNewInvestor()" [disabled]="investor.invalid">Add</button>
+    <button mat-raised-button color="accent" >Go back</button>
+  </div>
+</form>
