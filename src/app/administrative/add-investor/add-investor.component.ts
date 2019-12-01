@@ -5,6 +5,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Tontine } from 'src/app/models/tontine.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Investor, InvestorStatus } from 'src/app/models/investor.model';
+import * as  uuid from 'uuid';
 
 @Component({
   selector: 'app-add-investor',
@@ -24,6 +26,9 @@ export class AddInvestorComponent implements OnInit {
     private tontineDataService: TontineLocalStorageService
   ) { }
 
+  /**
+   * Turn must be 0 based
+   */
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
       const tontineId = paramMap.get('tontineId');
@@ -33,12 +38,11 @@ export class AddInvestorComponent implements OnInit {
       if (!tontineId || !this.tontine) {
         this.router.navigate(['admin']);
       } else {
-        const round = this.tontine.round;
         this.investor = this.fb.group({
           name: ['', Validators.required],
           joinDate: [new Date(), Validators.required],
-          turns: this.fb.array([
-            [round]
+          nextTurns: this.fb.array([
+            [this.maxTurnAllowed]
           ], Validators.required),
           bank: ['', Validators.required],
           bankAccount: ['', Validators.required],
@@ -48,17 +52,17 @@ export class AddInvestorComponent implements OnInit {
     });
   }
 
-  get turns(): FormArray {
-    return this.investor.get('turns') as FormArray;
+  get nextTurns(): FormArray {
+    return this.investor.get('nextTurns') as FormArray;
   }
 
   addNewTurn() {
     this.tontine.round++;
-    this.turns.insert(this.turns.length - 1, this.fb.control(this.tontine.round));
+    this.nextTurns.insert(this.nextTurns.length - 1, this.fb.control(this.tontine.round));
   }
 
   removeTurn(index: number) {
-    (this.investor.get('turns') as FormArray).removeAt(index);
+    this.nextTurns.removeAt(index);
   }
 
   formatLabel = (value: number) => {
@@ -66,29 +70,56 @@ export class AddInvestorComponent implements OnInit {
   }
 
   addNewInvestor() {
-    const updatedTontine = this.tontineService.addNewInvestor(this.tontine, this.investor) as Tontine;
-    this.tontineDataService.saveTontine(updatedTontine);
+    this.tontineService.addNewInvestor(this.tontine, this.newInvestor, this.investor.get('investToCurrentRound').value);
     this.router.navigate(['admin']);
   }
 
-  get investData(): any {
-    return {
+  get newInvestor(): Investor {
+    const investUserInput = {
       name: this.investor.get('name').value,
       joinDate: this.joinDate,
-      nextTurn: this.turns.value as Array<number>,
-      turns: (this.turns.value as Array<number>).length,
+      nextTurns: this.nextTurns.value as Array<number>,
+      turns: (this.nextTurns.value as Array<number>).length,
       bank: this.investor.get('bank').value,
-      bankAccount: this.investor.get('bankAccount').value
+      bankAccount: this.investor.get('bankAccount').value,
+      phoneNumber: null,
+      fb: null,
+      yearOfBirth: null,
+      gender: null,
+      address: null
+    };
+
+    return {
+      createdDate: new Date().getTime(),
+      updatedDate: new Date().getTime(),
+      id: uuid.v4(),
+      name: investUserInput.name,
+      joinDate: investUserInput.joinDate,
+      status: InvestorStatus.New,
+      debt: 0,
+      bank: investUserInput.bank,
+      bankAccount: investUserInput.bankAccount,
+      phoneNumber: investUserInput.phoneNumber,
+      fb: investUserInput.fb,
+      turns: investUserInput.turns,
+      nextTurns: investUserInput.nextTurns,
+      yearOfBirth: investUserInput.yearOfBirth,
+      gender: investUserInput.gender,
+      address: investUserInput.address
     };
   }
 
   get joinDate(): string {
     const joinDateValue = this.investor.get('joinDate').value as Date;
     const day = joinDateValue.getDate();
-    const month = joinDateValue.getMonth();
+    const month = joinDateValue.getMonth() + 1; // Month is 0 based
     const year = joinDateValue.getFullYear();
     const dayStr = day > 9 ? `${day}` : `0${day}`;
     const monthStr = month > 9 ? `${month}` : `0${month}`;
     return `${dayStr}-${monthStr}-${year}`;
+  }
+
+  get maxTurnAllowed(): number {
+    return this.tontine.round;
   }
 }

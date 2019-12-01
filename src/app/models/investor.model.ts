@@ -20,7 +20,7 @@ export interface Investor {
   phoneNumber: string;
   fb: string;
   turns: number;
-  nextTurn: number[];
+  nextTurns: number[];
   yearOfBirth?: number;
   gender?: string;
   address?: string;

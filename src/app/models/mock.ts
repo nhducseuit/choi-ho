@@ -1,12 +1,15 @@
 import { Tontine } from './tontine.model';
 import { Investor, InvestorStatus } from './investor.model';
 
+/**
+ * Turn must be 0 based
+ */
 export const TONTINE: Tontine = {
-  createdDate: 1,
-  updatedDate: 1,
-  id: 'tontine',
-  round: 10,
-  turn: 2,
+  createdDate: new Date().valueOf(),
+  updatedDate: new Date().valueOf(),
+  id: 'phuong-vlog',
+  round: 0,
+  turn: 0,
   period: {
     unit: 'Month',
     amount: 1
@@ -31,7 +34,7 @@ export const INVESTORS: Investor[] = [
     phoneNumber: '0937249085',
     fb: 'https://www.facebook.com/duc.nguyen.hoang.uit',
     turns: 1,
-    nextTurn: [1]
+    nextTurns: [1]
   },
   {
     createdDate: 1573832731696,
@@ -46,7 +49,7 @@ export const INVESTORS: Investor[] = [
     phoneNumber: '',
     fb: 'https://www.facebook.com/tronveoo',
     turns: 1,
-    nextTurn: [2]
+    nextTurns: [2]
   },
   {
     createdDate: 1573832731696,
@@ -61,7 +64,7 @@ export const INVESTORS: Investor[] = [
     phoneNumber: '',
     fb: 'https://www.facebook.com/khanhlinh8493',
     turns: 1,
-    nextTurn: [3]
+    nextTurns: [3]
   },
   {
     createdDate: 1573832731696,
@@ -76,7 +79,7 @@ export const INVESTORS: Investor[] = [
     phoneNumber: '',
     fb: 'https://www.facebook.com/ha.ntt.92',
     turns: 2,
-    nextTurn: [4, 9]
+    nextTurns: [4, 9]
   },
   {
     createdDate: 1573832731696,
@@ -91,7 +94,7 @@ export const INVESTORS: Investor[] = [
     phoneNumber: '',
     fb: 'https://www.facebook.com/profile.php?id=100027737738651',
     turns: 1,
-    nextTurn: [5]
+    nextTurns: [5]
   },
   {
     createdDate: 1573832731696,
@@ -106,7 +109,7 @@ export const INVESTORS: Investor[] = [
     phoneNumber: '',
     fb: 'https://www.facebook.com/linhnguyen.books',
     turns: 1,
-    nextTurn: [6]
+    nextTurns: [6]
   },
   {
     createdDate: 1573832731696,
@@ -121,7 +124,7 @@ export const INVESTORS: Investor[] = [
     phoneNumber: '0937249085',
     fb: 'https://www.facebook.com/profile.php?id=100008844492988',
     turns: 1,
-    nextTurn: [7]
+    nextTurns: [7]
   },
   {
     createdDate: 1573832731696,
@@ -136,7 +139,7 @@ export const INVESTORS: Investor[] = [
     phoneNumber: '',
     fb: 'https://www.facebook.com/chanh.bim',
     turns: 1,
-    nextTurn: [8]
+    nextTurns: [8]
   },
   {
     createdDate: 1573832731696,
@@ -151,7 +154,7 @@ export const INVESTORS: Investor[] = [
     phoneNumber: '',
     fb: 'https://www.facebook.com/biennho.nho.92',
     turns: 1,
-    nextTurn: [10]
+    nextTurns: [10]
   }
 ];
 

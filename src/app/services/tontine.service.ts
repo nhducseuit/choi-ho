@@ -1,13 +1,16 @@
+import { TontineLocalStorageService } from './tontine-localstorage.service';
 import { Investor, InvestorStatus } from './../models/investor.model';
 import { Injectable } from '@angular/core';
 import { Tontine } from '../models/tontine.model';
 import { Observable, of } from 'rxjs';
-import * as  uuid from 'uuid';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TontineService {
+
+
+  constructor(private tontineDataService: TontineLocalStorageService) {}
 
   public validateTontine(tontine: Tontine, investors: Investor[]): boolean | string {
     if (!tontine) {
@@ -29,41 +32,27 @@ export class TontineService {
     if (totalTurns !== tontine.round) {
       return 'Tontine information is out of sync';
     }
-    const configurationMismatched = investors.some(investor => investor.turns !== investor.nextTurn.length);
+    const configurationMismatched = investors.some(investor => investor.turns !== investor.nextTurns.length);
     if (configurationMismatched) {
       return 'Some investor information is not correct';
     }
     return true;
   }
 
-  public addNewInvestor(tontine: Tontine, investor: any): Tontine | Observable<Tontine> {
-    if (!investor) {
-      return null;
-    }
-    const newInvestor: Investor = {
-      createdDate: new Date().getTime(),
-      updatedDate: new Date().getTime(),
-      id: uuid.v4(),
-      name: investor.name,
-      joinDate: investor.joinDate,
-      status: InvestorStatus.New,
-      debt: 0,
-      bank: investor.bank,
-      bankAccount: investor.bankAccount,
-      phoneNumber: investor.phoneNumber,
-      fb: investor.fb,
-      turns: 1,
-      nextTurn: [this.appendTurnToTontine(tontine)],
-      yearOfBirth: investor.yearOfBirth,
-      gender: investor.gender,
-      address: investor.address
-    };
-    return this.addNewInvestorToTontine(tontine, newInvestor);
-  }
-
-  private addNewInvestorToTontine(tontine: Tontine, investor: Investor): Tontine | Observable<Tontine> {
+  public addNewInvestor(tontine: Tontine, investor: Investor, investToCurrentRound?: boolean): Tontine | Observable<Tontine> {
     tontine.investors.push(investor);
-    // tontine.round++; Haven't yet updated the round
+    const isInvestee = !tontine.investee && investor.nextTurns.some(nextTurn => nextTurn === tontine.turn);
+    if (isInvestee) {
+      investor.status = InvestorStatus.Active;
+      tontine.round++;
+      tontine.investee = investor;
+    } else if (investToCurrentRound) {
+      this.invest(tontine, investor);
+      tontine.round++;
+    } // Last case that round size of tontine isn't updated: investor is added as new but is scheduled to join next round shift
+
+    // TODO save investor data to server as well
+    this.tontineDataService.saveTontine(tontine);
     return tontine;
   }
 
@@ -88,7 +77,7 @@ export class TontineService {
     tontine.turn++;
     //  Determine investee
     const nextInvestee = tontine.investors
-      .find(investor => investor.nextTurn.some(nt => nt === tontine.turn));
+      .find(investor => investor.nextTurns.some(nt => nt === tontine.turn));
     if (!nextInvestee) {
       throw new Error('Cannot determine next Investee!');
     }
@@ -121,13 +110,9 @@ export class TontineService {
     return tontine;
   }
 
-  private appendTurnToTontine(tontine: Tontine): number {
-    return tontine.round + 1;
-  }
-
   public getPassedTurnInARound(tontine: Tontine, investor: Investor): number[] {
     const passedTurn = [];
-    for (const turn of investor.nextTurn) {
+    for (const turn of investor.nextTurns) {
       if (turn <= tontine.turn) {
         passedTurn.push(turn);
       }
@@ -137,7 +122,7 @@ export class TontineService {
 
   public getRemainingTurnInARound(tontine: Tontine, investor: Investor): number[] {
     const remainingTurn = [];
-    for (const turn of investor.nextTurn) {
+    for (const turn of investor.nextTurns) {
       if (turn > tontine.turn) {
         remainingTurn.push(turn);
       }
@@ -162,8 +147,10 @@ export class TontineService {
   }
 
   public invest(tontine: Tontine, investor: Investor) {
-    investor.debt += (investor.turns * tontine.sum);
+    const investAmount = (investor.turns * tontine.sum);
+    investor.debt -= investAmount;
     investor.status = InvestorStatus.Invested;
-
+    tontine.investee.debt += investAmount;
+    // return investor;
   }
 }
