@@ -1,10 +1,10 @@
+import { TontineLocalStorageService } from './../../services/tontine-localstorage.service';
 import { TontineService } from './../../services/tontine.service';
 import { ShareDataService } from './../../services/share-data.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Tontine } from 'src/app/models/tontine.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TontineDataService } from 'src/app/services/tontine-data.service';
 
 @Component({
   selector: 'app-add-investor',
@@ -21,7 +21,7 @@ export class AddInvestorComponent implements OnInit {
     private router: Router,
     private shareDataService: ShareDataService,
     private tontineService: TontineService,
-    private tontineDataService: TontineDataService
+    private tontineDataService: TontineLocalStorageService
   ) { }
 
   ngOnInit() {
@@ -41,7 +41,8 @@ export class AddInvestorComponent implements OnInit {
             [round]
           ], Validators.required),
           bank: ['', Validators.required],
-          bankAccount: ['', Validators.required]
+          bankAccount: ['', Validators.required],
+          investToCurrentRound: [true]
         });
       }
     });
@@ -67,7 +68,7 @@ export class AddInvestorComponent implements OnInit {
   addNewInvestor() {
     const updatedTontine = this.tontineService.addNewInvestor(this.tontine, this.investor) as Tontine;
     this.tontineDataService.saveTontine(updatedTontine);
-    this.tontine = updatedTontine;
+    this.router.navigate(['admin']);
   }
 
   get investData(): any {

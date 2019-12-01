@@ -1,5 +1,4 @@
 import { Investor, InvestorStatus } from './../models/investor.model';
-import { TONTINE, INVESTORS } from './../models/mock';
 import { Injectable } from '@angular/core';
 import { Tontine } from '../models/tontine.model';
 import { Observable, of } from 'rxjs';
@@ -160,5 +159,9 @@ export class TontineService {
       default:
         return 'Họ chỉ tính lượt bằng tháng hoặc năm';
     }
+  }
+
+  public invest(tontine: Tontine, investor: Investor) {
+    investor.debt
   }
 }

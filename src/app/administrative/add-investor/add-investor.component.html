@@ -32,7 +32,7 @@
   <mat-form-field>
     <input matInput formControlName="bankAccount" placeholder="Số tài khoản ngân hàng">
   </mat-form-field>
-
+  <mat-checkbox color="primary" formControlName="investToCurrentRound">Đầu tư vào vòng hiện tại luôn</mat-checkbox>
   <div class="action-buttons">
     <button mat-raised-button color="primary" (click)="addNewInvestor()" [disabled]="investor.invalid">Add</button>
     <button mat-raised-button color="accent" >Go back</button>

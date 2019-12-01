@@ -6,7 +6,8 @@ import {
   MatSliderModule,
   MatNativeDateModule,
   MatInputModule,
-  MatSelectModule
+  MatSelectModule,
+  MatCheckboxModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -31,7 +32,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatNativeDateModule,
     MatSliderModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCheckboxModule
   ]
 })
 export class AdministrativeModule { }
