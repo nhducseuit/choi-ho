@@ -162,6 +162,8 @@ export class TontineService {
   }
 
   public invest(tontine: Tontine, investor: Investor) {
-    investor.debt
+    investor.debt += (investor.turns * tontine.sum);
+    investor.status = InvestorStatus.Invested;
+
   }
 }
