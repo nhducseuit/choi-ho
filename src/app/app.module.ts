@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { TontineExplorerModule } from './tontine-explorer/tontine-explorer.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { MatSliderModule } from '@angular/material';
     AppRoutingModule,
     TontineExplorerModule,
     BrowserAnimationsModule,
-    MatSliderModule
+    MatSliderModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
