@@ -11,6 +11,7 @@ export interface Investor {
   updatedDate: number;
   deletedDate?: number;
   id: string;
+  tontineId: string;
   name: string;
   joinDate: string;
   debt: number;

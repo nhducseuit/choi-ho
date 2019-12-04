@@ -13,6 +13,6 @@ export interface Tontine {
     period: Period;
     startDate: string;
     sum: number;
-    investors: Investor[];
-    investee: Investor;
+    investors?: Investor[];
+    investee?: Investor;
 }
