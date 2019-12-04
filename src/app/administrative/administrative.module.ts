@@ -33,7 +33,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatSliderModule,
     MatSelectModule,
     MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatFormFieldModule
   ]
 })
 export class AdministrativeModule { }

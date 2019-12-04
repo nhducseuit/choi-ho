@@ -1,12 +1,13 @@
-<div class="investor-list">
-  <div class="investor" *ngFor="let investor of investors" (click)="investorClicked(investor)">
-    <div class="avatar">
-      <i class="material-icons">face</i>
-    </div>
-    <div class="name">
-      <span>{{ investor.name }}</span>
-    </div>
-  </div>
-</div>
-<mat-progress-bar mode="indeterminate"></mat-progress-bar>
-<app-investor [investor]="selectedInvestor" [tontine]="tontine"></app-investor>
+<mat-expansion-panel *ngFor="let investor of investors">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{ investor.name }}
+    </mat-panel-title>
+    <mat-panel-description>
+      {{ investor.phoneNumber }}
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <app-investor-info [investor]="investor" [tontine]="tontine"></app-investor-info>
+
+</mat-expansion-panel>

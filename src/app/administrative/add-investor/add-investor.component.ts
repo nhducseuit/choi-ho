@@ -46,7 +46,12 @@ export class AddInvestorComponent implements OnInit {
           ], Validators.required),
           bank: ['', Validators.required],
           bankAccount: ['', Validators.required],
-          investToCurrentRound: [true]
+          investToCurrentRound: [true],
+          gender: [''],
+          address: [''],
+          phoneNumber: [''],
+          fb: [''],
+          yearOfBirth: ['']
         });
       }
     });
@@ -82,11 +87,11 @@ export class AddInvestorComponent implements OnInit {
       turns: (this.nextTurns.value as Array<number>).length,
       bank: this.investor.get('bank').value,
       bankAccount: this.investor.get('bankAccount').value,
-      phoneNumber: null,
-      fb: null,
-      yearOfBirth: null,
-      gender: null,
-      address: null
+      phoneNumber: this.investor.get('phoneNumber').value,
+      fb: this.investor.get('fb').value,
+      yearOfBirth: this.investor.get('yearOfBirth').value,
+      gender: this.investor.get('gender').value,
+      address: this.investor.get('address').value
     };
 
     return {

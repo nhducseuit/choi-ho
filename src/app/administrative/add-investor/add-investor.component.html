@@ -1,10 +1,33 @@
 <h3>Add an investor</h3>
 <form [formGroup]="investor" *ngIf="tontine">
+  <div class="row">
+    <mat-form-field>
+      <mat-label>Danh xưng</mat-label>
+      <mat-select formControlName="gender">
+        <mat-option value="female">Chị</mat-option>
+        <mat-option value="male">Anh</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="name" placeholder="Tên đầy đủ">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="yearOfBirth" placeholder="Sinh năm">
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field>
+      <input matInput formControlName="phoneNumber" placeholder="Số điện thoại">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="fb" placeholder="Link facebook">
+    </mat-form-field>
+  </div>
   <mat-form-field>
-    <input matInput formControlName="name" placeholder="Họ tên đầy đủ người tham gia">
+    <input matInput formControlName="address" placeholder="Địa chỉ">
   </mat-form-field>
   <mat-form-field>
-    <input matInput formControlName="joinDate" [matDatepicker]="picker" placeholder="Lựa ngày tham gia hụi">
+    <input matInput formControlName="joinDate" [matDatepicker]="picker" placeholder="Định ngày tham gia hụi">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker startView="year" [startAt]="investor.get('joinDate').value"></mat-datepicker>
   </mat-form-field>
@@ -26,12 +49,14 @@
   <button mat-icon-button color="primary" (click)="addNewTurn()">
     <mat-icon>add</mat-icon>
   </button>
-  <mat-form-field>
-    <input matInput formControlName="bank" placeholder="Chi nhánh ngân hàng">
-  </mat-form-field>
-  <mat-form-field>
-    <input matInput formControlName="bankAccount" placeholder="Số tài khoản ngân hàng">
-  </mat-form-field>
+  <div class="row">
+    <mat-form-field>
+      <input matInput formControlName="bank" placeholder="Chi nhánh ngân hàng">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput formControlName="bankAccount" placeholder="Số tài khoản ngân hàng">
+    </mat-form-field>
+  </div>
   <mat-checkbox color="primary" formControlName="investToCurrentRound">Đầu tư vào vòng hiện tại luôn</mat-checkbox>
   <div class="action-buttons">
     <button mat-raised-button color="primary" (click)="addNewInvestor()" [disabled]="investor.invalid">Add</button>
