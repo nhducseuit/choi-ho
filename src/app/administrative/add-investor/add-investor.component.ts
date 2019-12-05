@@ -98,6 +98,7 @@ export class AddInvestorComponent implements OnInit {
       createdDate: new Date().getTime(),
       updatedDate: new Date().getTime(),
       id: uuid.v4(),
+      tontineId: this.tontine.id,
       name: investUserInput.name,
       joinDate: investUserInput.joinDate,
       status: InvestorStatus.New,

@@ -1,12 +1,20 @@
+import { TontineHttpService } from './../../services/tontine-http.service';
 import { TONTINE, INVESTORS } from './../../models/mock';
 import { Component, OnInit } from '@angular/core';
 import { Tontine } from 'src/app/models/tontine.model';
 import { Investor } from 'src/app/models/investor.model';
+import { TontineDataService } from 'src/app/services/tontine-data.service';
 
+const tontineId = 'phuong-vlog';
 @Component({
   selector: 'app-tontine',
   templateUrl: './tontine.component.html',
-  styleUrls: ['./tontine.component.scss']
+  styleUrls: ['./tontine.component.scss'],
+  providers: [
+    {
+      provide: TontineDataService, useClass: TontineHttpService
+    }
+  ]
 })
 export class TontineComponent implements OnInit {
 
@@ -14,10 +22,12 @@ export class TontineComponent implements OnInit {
   investors: Investor[];
   selectedInvestor: Investor;
 
-  constructor() { }
+  constructor(private tontineDataService: TontineDataService) { }
 
-  ngOnInit() {
-    this.initMockData();
+  async ngOnInit() {
+    // this.initMockData();
+    this.tontine = await this.tontineDataService.getTontineById(tontineId).toPromise();
+    this.investors = await this.tontineDataService.getInvestorsOfTontine(this.tontine.id).toPromise();
   }
 
   initMockData() {
