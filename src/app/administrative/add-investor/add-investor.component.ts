@@ -1,8 +1,7 @@
-import { TontineLocalStorageService } from './../../services/tontine-localstorage.service';
 import { TontineService } from './../../services/tontine.service';
 import { ShareDataService } from './../../services/share-data.service';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Tontine } from 'src/app/models/tontine.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Investor, InvestorStatus } from 'src/app/models/investor.model';
@@ -22,8 +21,7 @@ export class AddInvestorComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private shareDataService: ShareDataService,
-    private tontineService: TontineService,
-    private tontineDataService: TontineLocalStorageService
+    private tontineService: TontineService
   ) { }
 
   /**
@@ -41,9 +39,7 @@ export class AddInvestorComponent implements OnInit {
         this.investor = this.fb.group({
           name: ['', Validators.required],
           joinDate: [new Date(), Validators.required],
-          nextTurns: this.fb.array([
-            [this.maxTurnAllowed]
-          ], Validators.required),
+          turns: [1, Validators.required],
           bank: ['', Validators.required],
           bankAccount: ['', Validators.required],
           investToCurrentRound: [true],
@@ -57,34 +53,27 @@ export class AddInvestorComponent implements OnInit {
     });
   }
 
-  get nextTurns(): FormArray {
-    return this.investor.get('nextTurns') as FormArray;
-  }
-
-  addNewTurn() {
-    this.tontine.round++;
-    this.nextTurns.insert(this.nextTurns.length - 1, this.fb.control(this.tontine.round));
-  }
-
-  removeTurn(index: number) {
-    this.nextTurns.removeAt(index);
-  }
-
-  formatLabel = (value: number) => {
-    return this.tontineService.convertTurnToString(value, this.tontine);
-  }
-
   addNewInvestor() {
     this.tontineService.addNewInvestor(this.tontine, this.newInvestor, this.investor.get('investToCurrentRound').value);
     this.router.navigate(['admin']);
+  }
+
+  get nextTurns(): number[] {
+    const nextTurns = [];
+    const turns = this.investor.get('turns').value as number;
+    const recalculatedRound = this.tontine.round + turns;
+    for (let i = turns; i > 0; i--) {
+      nextTurns.push(recalculatedRound - i);
+    }
+    return nextTurns;
   }
 
   get newInvestor(): Investor {
     const investUserInput = {
       name: this.investor.get('name').value,
       joinDate: this.joinDate,
-      nextTurns: this.nextTurns.value as Array<number>,
-      turns: (this.nextTurns.value as Array<number>).length,
+      nextTurns: this.nextTurns,
+      turns: this.investor.get('turns').value,
       bank: this.investor.get('bank').value,
       bankAccount: this.investor.get('bankAccount').value,
       phoneNumber: this.investor.get('phoneNumber').value,
@@ -123,9 +112,5 @@ export class AddInvestorComponent implements OnInit {
     const dayStr = day > 9 ? `${day}` : `0${day}`;
     const monthStr = month > 9 ? `${month}` : `0${month}`;
     return `${dayStr}-${monthStr}-${year}`;
-  }
-
-  get maxTurnAllowed(): number {
-    return this.tontine.round;
   }
 }
