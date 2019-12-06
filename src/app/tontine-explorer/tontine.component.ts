@@ -1,5 +1,5 @@
-import { TontineHttpService } from './../../services/tontine-http.service';
-import { TONTINE, INVESTORS } from './../../models/mock';
+import { TontineHttpService } from './../services/tontine-http.service';
+import { TONTINE, INVESTORS } from './../models/mock';
 import { Component, OnInit } from '@angular/core';
 import { Tontine } from 'src/app/models/tontine.model';
 import { Investor } from 'src/app/models/investor.model';

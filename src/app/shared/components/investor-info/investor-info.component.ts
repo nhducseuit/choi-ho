@@ -59,7 +59,7 @@ export class InvestorInfoComponent implements OnInit, OnChanges {
     const round = this.tontine.round;
     const sum = this.tontine.sum;
     const remainingInvestedTurns = this.tontineService.getRemainingTurnInARound(this.tontine, this.investor).length;
-    return currentDebt - (this.investor.turns * sum * (round - currentTurn - remainingInvestedTurns))
+    return currentDebt - (this.investor.turns * sum * (round - currentTurn - 1 - remainingInvestedTurns))
                        + remainingInvestedTurns * sum * (round - this.investor.turns);
   }
 

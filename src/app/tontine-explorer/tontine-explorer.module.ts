@@ -2,13 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TontineExplorerRoutingModule } from './tontine-explorer-routing.module';
-import { TontineComponent } from './tontine/tontine.component';
+import { TontineComponent } from './tontine.component';
 import { MatIconModule, MatProgressBarModule, MatExpansionModule } from '@angular/material';
-import { InvestorComponent } from './investor/investor.component';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [TontineComponent, InvestorComponent],
+  declarations: [TontineComponent],
   imports: [
     CommonModule,
     TontineExplorerRoutingModule,

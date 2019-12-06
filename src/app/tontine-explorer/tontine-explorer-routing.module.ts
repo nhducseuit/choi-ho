@@ -1,6 +1,6 @@
-import { TontineComponent } from './tontine/tontine.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { TontineComponent } from './tontine.component';
 
 const routes: Routes = [
   {
