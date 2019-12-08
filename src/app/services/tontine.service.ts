@@ -1,8 +1,8 @@
-import { TontineLocalStorageService } from './tontine-localstorage.service';
+import { TontineHttpService } from './tontine-http.service';
 import { Investor, InvestorStatus } from './../models/investor.model';
 import { Injectable } from '@angular/core';
 import { Tontine } from '../models/tontine.model';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import { Observable, of } from 'rxjs';
 export class TontineService {
 
 
-  constructor(private tontineDataService: TontineLocalStorageService) {}
+  constructor(private tontineDataService: TontineHttpService) {}
 
   public validateTontine(tontine: Tontine, investors: Investor[]): boolean | string {
     if (!tontine) {
@@ -43,7 +43,6 @@ export class TontineService {
     tontine.investors.push(investor);
     const isInvestee = !tontine.investee && investor.nextTurns.some(nextTurn => nextTurn === tontine.turn);
     if (isInvestee) {
-      investor.status = InvestorStatus.Active;
       tontine.round++;
       tontine.investee = investor;
     } else if (investToCurrentRound) {
@@ -51,12 +50,12 @@ export class TontineService {
       tontine.round++;
     } // Last case that round size of tontine isn't updated: investor is added as new but is scheduled to join next round shift
 
-    // TODO save investor data to server as well
+    this.tontineDataService.saveInvestor(investor);
     this.tontineDataService.saveTontine(tontine);
     return tontine;
   }
 
-  public shiftTurn(tontine: Tontine): Tontine {
+  public shiftTurn(tontine: Tontine) {
     // TODO shift to a new turn
     // NB! Turn can only be shifted forward
     // 1. Check if there is any investor which is marked as 'NEW' or 'CHANGED' and recalculate tontine's round. Make no change otherwise
@@ -81,28 +80,22 @@ export class TontineService {
     if (!nextInvestee) {
       throw new Error('Cannot determine next Investee!');
     }
+    tontine.investee = nextInvestee;
     // Shift all investors to new turn. For new investee, update debt correctly and set to tontine
     // After that, set updated investors to tontine
-    tontine.investors = tontine.investors.map(investor => {
-      const updatedInvestor = this.shiftInvestorToNewTurn(investor, tontine);
-      if (updatedInvestor.id === nextInvestee.id) {
-        updatedInvestor.debt += (tontine.round * tontine.sum);
-        tontine.investee = updatedInvestor;
-      }
-      return updatedInvestor;
+    tontine.investors.map(investor => {
+      this.invest(tontine, investor);
+      return investor;
+    })
+    .forEach(investor => {
+      this.tontineDataService.saveInvestor(investor);
     });
 
-    return tontine;
+    return this.tontineDataService.saveTontine(tontine);
   }
 
   public isTontineEnding(tontine: Tontine): boolean {
     return tontine.turn === tontine.round;
-  }
-
-  public shiftInvestorToNewTurn(investor: Investor, tontine: Tontine): Investor {
-    investor.debt -= (investor.turns * tontine.sum);
-    investor.status = InvestorStatus.Active;
-    return investor;
   }
 
   public shiftRound(tontine: Tontine): Tontine {

@@ -27,6 +27,16 @@ export class TontineHttpService extends TontineDataService {
 
     public saveTontine(tontine: Tontine): Observable<any> {
       const url = `${BASE_URL}/tontine/${tontine.id}`;
-      return this.httpClient.post(url, tontine);
+      const savedTontine = {...tontine};
+      delete savedTontine.investee;
+      delete savedTontine.investors;
+      console.log('saving tontine ', tontine);
+      return this.httpClient.put(url, savedTontine);
+    }
+
+    public saveInvestor(investor: Investor) {
+      const url = `${BASE_URL}/investor/${investor.id}`;
+      console.log('Saving investor ', investor);
+      return this.httpClient.put(url, investor);
     }
 }

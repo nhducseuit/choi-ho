@@ -25,4 +25,8 @@ export abstract class TontineDataService {
 
   public saveTontine(tontine: Tontine) {
   }
+
+  public saveInvestor(investor: Investor) {
+
+  }
 }

@@ -1,6 +1,5 @@
 export enum InvestorStatus {
   New = 'NEW',
-  Active = 'ACTIVE',
   Invested = 'INVESTED',
   Changed = 'CHANGED',
   Removed = 'REMOVED'
