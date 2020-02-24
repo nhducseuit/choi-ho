@@ -5,13 +5,13 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'admin'
+    redirectTo: 'tontine'
   },
   {
     path: 'tontine',
     loadChildren: () => import('./tontine-explorer/tontine-explorer.module').then(m => m.TontineExplorerModule)
   },
-  { path: 'admin', loadChildren: () => import('./administrative/administrative.module').then(m => m.AdministrativeModule) }
+  { path: 'myadminpage', loadChildren: () => import('./administrative/administrative.module').then(m => m.AdministrativeModule) }
 ];
 
 @NgModule({
